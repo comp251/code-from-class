@@ -7,8 +7,10 @@ int main(int argc, char **argv) {
   char b[80] = "world";
   char c[80] = "";
 
-  strncat(a, b, 80);
-  printf("%s", a);
+  strncpy(c, a, 80);
+  strncat(c, " ", 80);
+  strncat(c, b, 80);
+  printf("c: %s\n", c);
 
   return 0;
 }
