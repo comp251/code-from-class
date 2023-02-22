@@ -4,9 +4,21 @@ c-day0/hello_world
 
 c-io/fgets
 c-io/hello
+c-io/guessing-game
 
-c-intro/initialization
-c-intro/types
+strings/strtok
+strings/string_fns
+
+types/types
+types/array_passing
+types/array_types
+
+debugging/buggy
+
+processes/process_creation
+
+memory/pointers
+memory/initialization
 
 
 # Prerequisites

@@ -1,0 +1,69 @@
+0x7fffa6eae810 <top>
+           80f ... 801
+0x7fffa6eae800 main_local_ld 
+           7ff
+           7fe
+           7fd
+           7fc
+           7fb
+           7fa
+           7f9
+           7f8 main_local_long (long)
+           7f7
+           7f6
+           7f5
+           7f4 main_local_int (int)
+           7f3
+           7f2
+           7f1
+           7f0
+           7ef
+           7ee
+           7ed
+           7ec argc (int)
+           7eb ... 7e8
+           7e7
+           7e6
+           7e5
+           7e4
+           7e3
+           7e2
+           7e1
+           7e0 argv (char**)
+           7cf
+           7ce
+           7cd
+           7cc
+           7cb
+           7ca
+           7c9
+           7c8 environ (char**) -- end of main --
+           7c7
+           7c6
+           7c5
+           7c4 f1_local_int, f2_local_int (int)
+           7c3 f1_local_char 
+           7c2
+           7c1
+           7c0
+           7bf
+           7be
+           7bd
+           7bc f1_arg, f2_arg1 (int)
+           7bb
+           7ba
+           7b9
+           7b8 f2_arg2 (int) -- end of f1/f2 --
+           7b7 ... 798
+           797
+           796
+           795
+           794 f3_local_int (int)
+           793
+           792
+           791
+           790
+           78f
+           78e
+           78d
+           78c f3_arg (int)
