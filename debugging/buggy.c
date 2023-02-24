@@ -18,7 +18,6 @@ void reverse_words(char *words[]) {
   printf("wordslen = %d\n", wordslen);
   for (int i = 0; i < wordslen; i++) {
     printf("words[%d]: %s\n", i, words[i]);
-    // swap? stop condition
     words[i] = words[wordslen - 1 - i];
     words[wordslen - 1 - i] = words[i];
   }
@@ -28,7 +27,7 @@ int main(int argc, char **argv) {
   char *words[MAX_WORDS];
   char input_buffer[MAX_LINE];
   // read a line
-  printf("> ");
+  printf("string? > ");
   char *ret = fgets(input_buffer, MAX_LINE, stdin);
   while (ret != NULL) {
     // while we have input, tokenize the line and then reverse the individual
@@ -36,12 +35,13 @@ int main(int argc, char **argv) {
     tokenize(input_buffer, words, MAX_WORDS);
     reverse_words(words);
     // print the reversed words
+    printf("reversed: ");
     for (int i = 0; words[i] != NULL; i++) {
       printf("%s ", words[i]);
     }
     printf("\n");
     // read next line
-    printf("> ");
+    printf("string? > ");
     ret = fgets(input_buffer, MAX_LINE, stdin);
   }
 }
