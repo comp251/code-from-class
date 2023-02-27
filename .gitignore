@@ -17,8 +17,13 @@ debugging/buggy
 
 processes/process_creation
 
-memory/pointers
+memory/buffer_overrun
+memory/dynamic_array
 memory/initialization
+memory/pointers
+memory/rand_file
+memory/return_local
+memory/stack
 
 
 # Prerequisites
