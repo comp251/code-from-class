@@ -5,7 +5,7 @@ void print_arr(int *arr, int n);
 void compute_metrics(int *arr, int n, double *mean, int *max, int *min,
                      long *sum);
 
-#define INIT_BUFFER_SIZE 128
+#define INIT_BUFFER_SIZE 16
 
 // we've written/used functions that have this kind of signature/contract:
 //
@@ -22,16 +22,33 @@ void compute_metrics(int *arr, int n, double *mean, int *max, int *min,
 // n is an out-parameter: number of integers read.
 int *read_from(FILE *src, int *n) {
   // int a[INIT_BUFFER_SIZE]; // declare array with a default size
-  int *arr =
-      malloc(INIT_BUFFER_SIZE * sizeof(int)); // pointer to array to populate
-  int in;                                     // temp for reading
-  int num_read = 0;
+  // int *arr =
+  //     malloc(INIT_BUFFER_SIZE * sizeof(int)); // pointer to array to populate
+  int *arr = NULL;  // pointer to array to populate
+  int arr_size = 0; // current size of array
+
+  int in;           // temp for reading
+  int num_read = 0; // number of elements read so far
 
   // while not EOF; read and store in array
   while (fscanf(src, "%d", &in) > 0) {
+    if (num_read >= arr_size) {
+      // array must grow; read enough elements to fill it.
+      // if (arr_size > 0) {
+      //   arr_size = arr_size * 2;
+      // } else {
+      //   arr_size = 1;
+      // }
+      // this is equivalent to the if statement above...
+      printf("growing array (%d ->", arr_size);
+      arr_size = arr_size > 0 ? arr_size * 2 : 1;
+      arr = realloc(arr, arr_size * sizeof(int));
+      printf(" %d)\n", arr_size);
+    }
     arr[num_read] = in;
     num_read++;
   }
+  perror("fscanf");
 
   *n = num_read;
   return arr;
@@ -55,7 +72,7 @@ int main(int argc, char **argv) {
   arr = read_from(in, &n_read);
   // n_read will be number of elements read.
 
-  print_arr(arr, n_read);
+  // print_arr(arr, n_read);
   int min, max;
   long sum;
   double mean;
@@ -63,6 +80,8 @@ int main(int argc, char **argv) {
   compute_metrics(arr, n_read, &mean, &max, &min, &sum);
   printf("count: %d\nsum: %ld\nmin: %d\nmax: %d\nmean %0.2f\n", n_read, sum,
          min, max, mean);
+  // free array -- return memory to be reused.
+  free(arr);
 }
 
 // Pretty-print an array.
