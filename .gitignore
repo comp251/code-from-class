@@ -20,10 +20,15 @@ processes/process_creation
 memory/buffer_overrun
 memory/dynamic_array
 memory/initialization
+memory/nums.txt
 memory/pointers
 memory/rand_file
 memory/return_local
 memory/stack
+
+adt/sensor_data
+adt/rand_file
+adt/temps.txt
 
 
 # Prerequisites
