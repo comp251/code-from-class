@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "weather.h"
+
 // returns the worst moment from a series of temperature and humidity
 // measurements.
 //
@@ -16,21 +18,16 @@
 //   worst_humidity (out): temp of worst humidity
 //
 // worst_temp and worst_humidity are unchanged if there are zero measurements.
-void worst_measurement(int n_measurements, double *temp, double *humidity,
-                       double *worst_temp, double *worst_humidity) {
-  if (n_measurements == 0) {
-    return;
-  }
-  double w_temp = temp[0];
-  double w_humidity = humidity[0];
-  for (int i = 0; i < n_measurements; i++) {
-    if (temp[i] > w_temp || (temp[i] == w_temp && humidity[i] > w_humidity)) {
-      w_temp = temp[i];
-      w_humidity = humidity[i];
+//
+// TODO: we still need to fix the code below that calls this function!
+struct weather worst_measurement(struct weather *arr, int size) {
+  struct weather worst = arr[0];
+  for (int i = 0; i < size; i++) {
+    if (compare(worst, arr[i]) < 0) {
+      worst = arr[i];
     }
   }
-  *worst_temp = w_temp;
-  *worst_humidity = w_humidity;
+  return worst;
 }
 
 int main(int argc, char **argv) {
@@ -56,7 +53,8 @@ int main(int argc, char **argv) {
     // parse line as two doubles.
     char *end = NULL;
     temp[n_read] = strtod(line, &end);
-    humidity[n_read] = strtod(end + 1, NULL);
+    humidity[n_read] = strtod(end + 1, &end);
+    // strtod(end + 1, NULL); // for rads
     n_read++;
   }
   printf("Read %d measurements\n", n_read);
