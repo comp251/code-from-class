@@ -30,6 +30,8 @@ adt/sensor_data
 adt/rand_file
 adt/temps.txt
 
+linked-data-structures/ll_driver
+
 
 # Prerequisites
 *.d
