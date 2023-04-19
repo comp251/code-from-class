@@ -32,6 +32,11 @@ adt/temps.txt
 
 linked-data-structures/ll_driver
 
+sockets/echo_client
+sockets/echo_full_client
+sockets/echo_server
+sockets/echo_full_server
+
 
 # Prerequisites
 *.d
