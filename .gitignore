@@ -36,6 +36,8 @@ sockets/echo_client
 sockets/echo_full_client
 sockets/echo_server
 sockets/echo_full_server
+sockets/vote_client
+sockets/vote_server
 
 
 # Prerequisites
