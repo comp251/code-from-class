@@ -36,6 +36,7 @@ sockets/echo_client
 sockets/echo_full_client
 sockets/echo_server
 sockets/echo_full_server
+sockets/threads
 sockets/vote_client
 sockets/vote_server
 

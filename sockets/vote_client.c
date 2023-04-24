@@ -25,6 +25,10 @@ int main(int argc, char **argv) {
     return 1;
   }
   char buffer[MAX_LINE_LEN];
+  printf("Valid commands:\n");
+  printf("\tadd <text>\n");
+  printf("\tget\n");
+  printf("\tvote <dir> <topic>\n");
   printf("> ");
   while (fgets(buffer, MAX_LINE_LEN, stdin) != NULL) {
     uio_write(buffer, strlen(buffer), fd);
