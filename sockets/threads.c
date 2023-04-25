@@ -7,8 +7,10 @@
 #define MAX_SLEEP_MSEC ((int)(50 * 1000))
 
 void *hello(void *arg) {
-  usleep(rand() % MAX_SLEEP_MSEC);
-  printf("hello!\n");
+  for (int i = 0; i < 10; i++) {
+    // usleep(rand() % MAX_SLEEP_MSEC);
+    printf("hello (%d)!\n", i);
+  }
   return NULL;
 }
 

@@ -100,6 +100,8 @@ int main(int argc, char **argv) {
     return 1;
   }
 
+  printf("Listening on %s\n", argv[1]);
+
   topics_t *topics = malloc(sizeof(topics_t));
   topics->n_topics = 0;
   topics->topic_cap = MAX_TOPICS;
@@ -111,6 +113,10 @@ int main(int argc, char **argv) {
   while (1) {
     client_len = sizeof(client);
     int conn = accept(fd, (struct sockaddr *)&client, &client_len);
+    // fork:
+    //  - parent call accept again
+    //  - child handle the client connection; after client disconnects, child
+    //  "expires"
     handle_client(conn, topics, (struct sockaddr *)&client, client_len);
   }
 
