@@ -2,6 +2,7 @@
 #include "uio.h"
 
 #include <netdb.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,8 +28,20 @@ typedef struct topics {
   int *votes;
 } topics_t;
 
-void handle_client(int clientfd, topics_t *topics, struct sockaddr *client,
-                   socklen_t client_len) {
+typedef struct {
+  int clientfd;
+  topics_t *topics;
+  struct sockaddr *client;
+  socklen_t *client_len;
+} client_fn_args_t;
+
+void *handle_client(void *arg) {
+  client_fn_args_t *t = arg;
+  int clientfd = t->clientfd;
+  topics_t *topics = t->topics;
+  struct sockaddr *client = t->client;
+  socklen_t client_len = *t->client_len;
+
   char buffer[MAX_LINE_LEN];
   char client_name[MAX_NAME_LEN];
   char client_port[MAX_NAME_LEN];
@@ -86,6 +99,10 @@ void handle_client(int clientfd, topics_t *topics, struct sockaddr *client,
   }
   close(clientfd);
   printf("%s:%s disconnected\n", client_name, client_port);
+  free(t->client_len);
+  free(t->client);
+  free(arg); // clean up after ourselves.
+  return NULL;
 }
 
 int main(int argc, char **argv) {
@@ -108,16 +125,28 @@ int main(int argc, char **argv) {
   topics->topics = malloc(MAX_TOPICS * sizeof(char *));
   topics->votes = calloc(MAX_TOPICS, sizeof(int));
 
-  struct sockaddr_storage client;
-  socklen_t client_len;
   while (1) {
-    client_len = sizeof(client);
-    int conn = accept(fd, (struct sockaddr *)&client, &client_len);
+    struct sockaddr_storage *client = malloc(sizeof(struct sockaddr_storage));
+    socklen_t *client_len = malloc(sizeof(socklen_t));
+    *client_len = sizeof(*client);
+    int conn = accept(fd, (struct sockaddr *)client, client_len);
     // fork:
     //  - parent call accept again
     //  - child handle the client connection; after client disconnects, child
-    //  "expires"
-    handle_client(conn, topics, (struct sockaddr *)&client, client_len);
+    //    "expires"
+    // multiplexing:
+    //  - try doing IO with each client in round-robin fashion
+    // or...
+    //  - use threads!
+    client_fn_args_t *args = malloc(sizeof(client_fn_args_t));
+    args->clientfd = conn;
+    args->topics = topics;
+    args->client = (struct sockaddr *)&client; // this is a bug... <-- a lie.
+    args->client_len = client_len;
+    // handle_client(args);
+    pthread_t thread_id;
+    pthread_create(&thread_id, NULL, handle_client, args);
+    pthread_detach(thread_id);
   }
 
   // don't bother freeing topics.

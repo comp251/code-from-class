@@ -40,6 +40,9 @@ sockets/threads
 sockets/vote_client
 sockets/vote_server
 
+threads/threads
+threads/race
+
 
 # Prerequisites
 *.d
