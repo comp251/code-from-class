@@ -13,4 +13,5 @@ This repository contains example code written + shared from COMP251 Spring 2023.
 * [processes/](processes/): Process creation using `fork`
 * [sockets/](sockets/): Socket programming + threads
 * [strings/](strings/): C strings lectures
+* [threads/](threads/): Threading
 * [types/](types/): C intro -- types
