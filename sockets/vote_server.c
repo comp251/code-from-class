@@ -33,6 +33,7 @@ typedef struct {
   topics_t *topics;
   struct sockaddr *client;
   socklen_t *client_len;
+  pthread_mutex_t *mu;
 } client_fn_args_t;
 
 void *handle_client(void *arg) {
@@ -52,6 +53,8 @@ void *handle_client(void *arg) {
 
   while (uio_readline(buffer, MAX_LINE_LEN, clientfd) > 0) {
     buffer[strchr(buffer, '\n') - buffer] = '\0';
+    // coarse-grained locking; lock before modifying topics.
+    pthread_mutex_lock(t->mu);
     if (strncmp(buffer, "add", 3) == 0) {
       // add a new topic
       if (topics->n_topics >= topics->topic_cap) {
@@ -96,6 +99,7 @@ void *handle_client(void *arg) {
       char *str = "error: invalid command\n";
       uio_write(str, strlen(str), clientfd);
     }
+    pthread_mutex_unlock(t->mu);
   }
   close(clientfd);
   printf("%s:%s disconnected\n", client_name, client_port);
@@ -118,6 +122,9 @@ int main(int argc, char **argv) {
   }
 
   printf("Listening on %s\n", argv[1]);
+
+  pthread_mutex_t mu;
+  pthread_mutex_init(&mu, NULL);
 
   topics_t *topics = malloc(sizeof(topics_t));
   topics->n_topics = 0;
@@ -143,6 +150,7 @@ int main(int argc, char **argv) {
     args->topics = topics;
     args->client = (struct sockaddr *)&client; // this is a bug... <-- a lie.
     args->client_len = client_len;
+    args->mu = &mu;
     // handle_client(args);
     pthread_t thread_id;
     pthread_create(&thread_id, NULL, handle_client, args);
